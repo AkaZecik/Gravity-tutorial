@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <SFML\Graphics.hpp>
+#include "Coin.h"
 
 class Player {
 public:
@@ -22,8 +23,12 @@ public:
 		player.setPosition(newPos);
 	}
 	
-	int getY() {
+	float getY() {
 		return player.getPosition().y;
+	}
+
+	bool isColidingWithCoin(Coin *coin) {
+		return player.getGlobalBounds().intersects(coin->getGlobalBounds());
 	}
 private:
 	sf::RectangleShape player;

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Coin.h"
+#include <sstream>
 
 int main()
 {
@@ -13,8 +15,35 @@ int main()
 
 	window.setKeyRepeatEnabled(true);
 
+	// Player object:
 	Player player({ 40, 70 });
 	player.setPos({ 50, 700 });
+
+	// Coin objects:
+	std::vector<Coin*> coinVec;
+	Coin coin1({ 20, 20 });
+	Coin coin2({ 20, 20 });
+
+	coin1.setPos({ 50, 600 });
+	coin2.setPos({ 100, 600 });
+
+	coinVec.push_back(&coin1);
+	coinVec.push_back(&coin2);
+
+	// Score objects:
+	int score = 0;
+
+	sf::Font arial;
+	arial.loadFromFile("arial.ttf");
+
+	std::ostringstream ssScore;
+	ssScore << "Score: " << score;
+
+	sf::Text lblScore;
+	lblScore.setCharacterSize(30);
+	lblScore.setFont(arial);
+	lblScore.setPosition({ 10, 10 });
+	lblScore.setString(ssScore.str());
 
 	// Gravity variables:
 	const int groundHeight = 700;
@@ -59,7 +88,21 @@ int main()
 			player.move({ 0, gravitySpeed });
 		}
 
+		// Coin logic:
+		for (size_t i = 0; i < coinVec.size(); i++) {
+			if (player.isColidingWithCoin(coinVec[i])) {
+				coinVec[i]->setPos({ 42222, 523424 });
+				score++;
+				ssScore.str("");
+				ssScore << "Score: " << score;
+				lblScore.setString(ssScore.str());
+			}
+		}
+
 		window.clear();
+		window.draw(lblScore);
+		coin1.drawTo(window);
+		coin2.drawTo(window);
 		player.drawTo(window);
 		window.display();
 	}
