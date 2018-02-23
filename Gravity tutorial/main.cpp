@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 int main()
 {
@@ -12,6 +13,8 @@ int main()
 
 	window.setKeyRepeatEnabled(true);
 
+	Player player({ 40, 40 });
+	player.setPos({ 50, 700 });
 
 
 	// main loop:
@@ -29,6 +32,7 @@ int main()
 		}
 
 		window.clear();
+		player.drawTo(window);
 		window.display();
 	}
 
