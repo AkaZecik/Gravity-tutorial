@@ -13,22 +13,50 @@ int main()
 
 	window.setKeyRepeatEnabled(true);
 
-	Player player({ 40, 40 });
+	Player player({ 40, 70 });
 	player.setPos({ 50, 700 });
 
+	// Gravity variables:
+	const int groundHeight = 700;
+	const float gravitySpeed = static_cast<float>(0.3);
+	bool isJumping = false;
 
 	// main loop:
 	while (window.isOpen())
 	{
 		sf::Event event;
 
+		const float moveSpeed = static_cast<float>(0.2);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			player.move({ 0, -moveSpeed });
+			isJumping = true;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			player.move({ moveSpeed, 0 });
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			player.move({ -moveSpeed, 0 });
+		}
+
 		// event loop:
 		while (window.pollEvent(event))
 		{
 			switch (event.type) {
-			case sf::Event::Closed:
-				window.close();
+				case sf::Event::Closed: {
+					window.close();
+				} break;
+				case sf::Event::KeyReleased: {
+					if (event.key.code == sf::Keyboard::Up) {
+						isJumping = false;
+					}
+				} break;
 			}
+		}
+
+		//Gravity logic:
+		if (player.getY() < groundHeight && isJumping == false) {
+			player.move({ 0, gravitySpeed });
 		}
 
 		window.clear();

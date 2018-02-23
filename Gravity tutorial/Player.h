@@ -21,6 +21,10 @@ public:
 	void setPos(sf::Vector2f newPos) {
 		player.setPosition(newPos);
 	}
+	
+	int getY() {
+		return player.getPosition().y;
+	}
 private:
 	sf::RectangleShape player;
 };
